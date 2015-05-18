@@ -47,6 +47,12 @@ public class BlunoService extends Service {
         isNull, isToScan, isScanning, isConnecting, isConnected, isDisconnecting
     };
     private theConnectionState mConnectionState;
+    protected enum warningState{
+        left, right, frontLeft, frontRight, front, twoSide, allDirection, safe, others
+    };
+    private warningState mWarningState;
+    private String mWarningText;
+    private int mWarningCount = 0;
     private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     private static BluetoothGattCharacteristic mSCharacteristic, mModelNumberCharacteristic, mSerialPortCharacteristic, mCommandCharacteristic;
@@ -59,11 +65,16 @@ public class BlunoService extends Service {
     public boolean mConnected = false;
     private final static String TAG = BlunoService.class.getSimpleName();
 
-    private int forwardLeft  = 100;
-    private int forwardRight = 100;
-    private int left         = 100;
-    private int right        = 100;
-    private static int threshold = 50;
+    private int frontLeft  = 100;
+    private int frontRight = 100;
+    private int left       = 100;
+    private int right      = 100;
+    private int frontLeftTemp = 100;
+    private int frontRightTemp = 100;
+    private int leftTemp = 100;
+    private int rightTemp = 100;
+    private static int frontThreshold = 50;
+    private static int sideThreshold = 35;
     private int postedNotificationCount = 0;
 
     private Runnable mConnectingOverTimeRunnable=new Runnable(){
@@ -329,15 +340,13 @@ public class BlunoService extends Service {
         String[] buffer = theString.split(",");
         Log.i("test", "onSerialRcecived");
         try{
-            forwardLeft  = Integer.parseInt(buffer[0]);
-            forwardRight = Integer.parseInt(buffer[1]);
+            frontLeft  = Integer.parseInt(buffer[0]);
+            frontRight = Integer.parseInt(buffer[1]);
             left         = Integer.parseInt(buffer[2]);
             right        = Integer.parseInt(buffer[3]);
-            if(forwardLeft < threshold || forwardRight < threshold || left < threshold || right < threshold){
-                postNotifications();
-            }
-            transferIntent.putExtra("forwardLeft", forwardLeft);
-            transferIntent.putExtra("forwardRight", forwardRight);
+            stateProcess();
+            transferIntent.putExtra("forwardLeft", frontLeft);
+            transferIntent.putExtra("forwardRight", frontRight);
             transferIntent.putExtra("left", left);
             transferIntent.putExtra("right", right);
             sendBroadcast(transferIntent);
@@ -346,13 +355,79 @@ public class BlunoService extends Service {
         }
     }
 
+    public void stateProcess(){
+        if((left > sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold) ||
+                mWarningCount > 5){
+            mWarningState = warningState.safe;
+            if(mWarningCount > 6 && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
+                    Math.abs(frontLeft-frontLeftTemp) > 20 || Math.abs(frontRight-frontRightTemp) > 20)){
+                mWarningCount = 0;
+            }
+            leftTemp = left;
+            rightTemp = right;
+            frontLeftTemp = frontLeft;
+            frontRightTemp = frontRight;
+            mWarningCount += 1;
+        }
+        else if(left < sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+            mWarningState = warningState.left;
+            mWarningText = "左方危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left > sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+            mWarningState = warningState.right;
+            mWarningText = "右方危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight > frontThreshold){
+            mWarningState = warningState.frontLeft;
+            mWarningText = "左前方危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left > sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight < frontThreshold){
+            mWarningState = warningState.frontRight;
+            mWarningText = "右前方危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left < sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+            mWarningState = warningState.twoSide;
+            mWarningText = "兩側危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+            mWarningState = warningState.front;
+            mWarningText = "前方危險, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else if(left < sideThreshold && right < sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+            mWarningState = warningState.allDirection;
+            mWarningText = "密集區域, 注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+        else{
+            mWarningState = warningState.others;
+            mWarningText = "注意";
+            mWarningCount += 1;
+            postNotifications();
+        }
+
+    }
+
+
     private void postNotifications(){
         sendBroadcast(new Intent(NotificationIntentReceiver.ACTION_ENABLE_MESSAGES)
                 .setClass(this, NotificationIntentReceiver.class));
 
         NotificationPreset preset = NotificationPresets.BASIC;
         CharSequence titlePreset = "危險!";
-        CharSequence textPreset = "前方有障礙物";
+        CharSequence textPreset =mWarningText;
         PriorityPreset priorityPreset = PriorityPresets.MAX;
         ActionsPreset actionsPreset = ActionsPresets.NO_ACTIONS_PRESET;
 
