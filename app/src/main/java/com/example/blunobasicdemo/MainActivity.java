@@ -13,15 +13,15 @@ import android.widget.TextView;
 
 public class MainActivity  extends BlunoLibrary {
 	private Button buttonScan;
-	private TextView serialReceivedForwardLeft;
-	private TextView serialReceivedForwardRight;
+	private TextView serialReceivedFrontLeft;
+	private TextView serialReceivedFrontRight;
 	private TextView serialReceivedLeft;
 	private TextView serialReceivedRight;
 	private MsgReceiver msgReceiver;
 	private Intent transferIntent = new Intent("com.example.blunobasicdemo.RECEIVER_SERVICE");
 
-	private int forwardLeft  = 0;
-	private int forwardRight = 0;
+	private int frontLeft  = 0;
+	private int frontRight = 0;
 	private int left         = 0;
 	private int right        = 0;
 	
@@ -31,8 +31,8 @@ public class MainActivity  extends BlunoLibrary {
 		setContentView(R.layout.activity_main);
 		onCreateProcess();
         buttonScan=(Button) findViewById(R.id.buttonScan);
-		serialReceivedForwardLeft=(TextView) findViewById(R.id.ForwardLeft);
-		serialReceivedForwardRight=(TextView) findViewById(R.id.ForwardRight);
+		serialReceivedFrontLeft=(TextView) findViewById(R.id.ForwardLeft);
+		serialReceivedFrontRight=(TextView) findViewById(R.id.ForwardRight);
 		serialReceivedLeft=(TextView) findViewById(R.id.Left);
         serialReceivedRight=(TextView) findViewById(R.id.Right);
 		buttonScan.setOnClickListener(new OnClickListener() {
@@ -81,16 +81,16 @@ public class MainActivity  extends BlunoLibrary {
 	public class MsgReceiver extends BroadcastReceiver{
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			forwardLeft  = intent.getIntExtra("forwardLeft", 0);
-			forwardRight = intent.getIntExtra("forwardRight", 0);
+			frontLeft  = intent.getIntExtra("forwardLeft", 0);
+			frontRight = intent.getIntExtra("forwardRight", 0);
 			left         = intent.getIntExtra("left", 0);
 			right        = intent.getIntExtra("right", 0);
 			connectionState = intent.getStringExtra("connectionState");
 
 			mConnectionState = theConnectionState.valueOf(connectionState);
 			onConectionStateChange(mConnectionState);
-			serialReceivedForwardLeft.setText(Integer.toString(forwardLeft));
-			serialReceivedForwardRight.setText(Integer.toString(forwardRight));
+			serialReceivedFrontLeft.setText(Integer.toString(frontLeft));
+			serialReceivedFrontRight.setText(Integer.toString(frontRight));
 			serialReceivedLeft.setText(Integer.toString(left));
 			serialReceivedRight.setText(Integer.toString(right));
 		}
