@@ -12,8 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,6 +30,7 @@ import com.example.blunobasicdemo.notification.NotificationPresets;
 import com.example.blunobasicdemo.notification.PriorityPreset;
 import com.example.blunobasicdemo.notification.PriorityPresets;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +53,7 @@ public class BlunoService extends Service {
     };
     private theConnectionState mConnectionState;
     protected enum warningState{
-        left, right, frontLeft, frontRight, front, twoSide, allDirection, safe, others
+        left, right, frontLeft, frontRight, front, twoSide,frontAndLeft, frontAndRight, allDirection, safe, others
     };
     private warningState mWarningState;
     private String mWarningText;
@@ -76,6 +81,7 @@ public class BlunoService extends Service {
     private static int frontThreshold = 50;
     private static int sideThreshold = 35;
     private int postedNotificationCount = 0;
+    private static long[] vibrate = {0, 100, 500, 100, 500};
 
     private Runnable mConnectingOverTimeRunnable=new Runnable(){
 
@@ -373,53 +379,82 @@ public class BlunoService extends Service {
             mWarningState = warningState.left;
             mWarningText = "左方危險, 注意";
             mWarningCount += 1;
-            postNotifications();
+            vibrate = new long[]{0, 100, 500, 100, 1000};
+            //postNotifications();
+            myNotification();
         }
         else if(left > sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
             mWarningState = warningState.right;
             mWarningText = "右方危險, 注意";
+            vibrate = new long[]{0, 500, 500, 100, 1000};
             mWarningCount += 1;
-            postNotifications();
-        }
+            //postNotifications();
+            myNotification();
+        }/*
         else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight > frontThreshold){
             mWarningState = warningState.frontLeft;
             mWarningText = "左前方危險, 注意";
             mWarningCount += 1;
-            postNotifications();
+            //postNotifications();
+            myNotification();
         }
         else if(left > sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight < frontThreshold){
             mWarningState = warningState.frontRight;
             mWarningText = "右前方危險, 注意";
             mWarningCount += 1;
-            postNotifications();
-        }
+            //postNotifications();
+            myNotification();
+        }*/
         else if(left < sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
             mWarningState = warningState.twoSide;
             mWarningText = "兩側危險, 注意";
             mWarningCount += 1;
-            postNotifications();
+            vibrate = new long[]{0, 1000, 500, 100, 1000};
+            //postNotifications();
+            myNotification();
         }
         else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
             mWarningState = warningState.front;
             mWarningText = "前方危險, 注意";
             mWarningCount += 1;
-            postNotifications();
+            vibrate = new long[]{0, 10, 500, 500, 1000};
+            //postNotifications();
+            myNotification();
         }
+
         else if(left < sideThreshold && right < sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
             mWarningState = warningState.allDirection;
             mWarningText = "密集區域, 注意";
             mWarningCount += 1;
-            postNotifications();
+            vibrate = new long[]{0, 1000, 500, 500, 1000};
+            //postNotifications();
+            myNotification();
+        }
+        else if(left < sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+            mWarningState = warningState.frontAndLeft;
+            mWarningText = "前方與左方危險, 注意";
+            mWarningCount += 1;
+            vibrate = new long[]{0, 100, 500, 500, 1000};
+            //postNotifications();
+            myNotification();
+        }
+        else if(left > sideThreshold && right < sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+            mWarningState = warningState.frontAndRight;
+            mWarningText = "前方與右方危險, 注意";
+            mWarningCount += 1;
+            vibrate = new long[]{0, 500, 500, 500, 1000};
+            //postNotifications();
+            myNotification();
         }
         else{
             mWarningState = warningState.others;
             mWarningText = "注意";
             mWarningCount += 1;
-            postNotifications();
+            //postNotifications();
+            myNotification();
         }
 
     }
-
 
     private void postNotifications(){
         sendBroadcast(new Intent(NotificationIntentReceiver.ACTION_ENABLE_MESSAGES)
@@ -454,6 +489,25 @@ public class BlunoService extends Service {
         }
         postedNotificationCount = notifications.length;
     }
+
+   public void myNotification(){
+       int notificationId = 001;
+       NotificationCompat.Builder notificationBuilder =
+               new NotificationCompat.Builder(this)
+                       .setSmallIcon(R.drawable.ic_launcher)
+                       .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.warning))
+                       .setContentTitle("危險！")
+                       .setContentText(mWarningText)
+                       .setPriority(2)
+                       .setVibrate(vibrate);
+
+        // Get an instance of the NotificationManager service
+       NotificationManagerCompat notificationManager =
+               NotificationManagerCompat.from(this);
+
+        // Build the notification and issues it with notification manager.
+       notificationManager.notify(notificationId, notificationBuilder.build());
+   }
 
     public class MsgReceiver extends BroadcastReceiver{
         @Override
