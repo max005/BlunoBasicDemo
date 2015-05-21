@@ -2,25 +2,74 @@
 <items version="2" >
 
     <item
-        jar="D:\workspace\AndroidStudio\BlunoBasicDemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\classes.jar"
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.support/wearable/1.1.0/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
-        <dex dex="D:\workspace\AndroidStudio\BlunoBasicDemo\app\build\intermediates\pre-dexed\debug\classes-103ecc66d9351202830f2828ad7c33d019822478.jar" />
+        sha1="27f19641b81b1078e653d2f0e5d1ed44d158a785">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-c10be3e9b6d9401d2f641ac6123df27f40efa031.jar" />
     </item>
     <item
-        jar="D:\workspace\AndroidStudio\BlunoBasicDemo\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\libs\internal_impl-20.0.0.jar"
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-85febc3b53b1284ffaefd8aa7f7b0e3cf75d72ab.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-b51f7817137579ee29fd333a830d9963e6d72fec.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-7806c40859204c6e7279be35aec8c2df19b9a67a.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-c94927bd92c1f6ea3f714fc36352937ebeef4118.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-3967e03cdb1df353b572f3ede4595b1960abcfc0.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
-        <dex dex="D:\workspace\AndroidStudio\BlunoBasicDemo\app\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-d7119dd47c8d0d33cf14915fd2b2f9eea4a600c5.jar" />
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-2ab8389b39ee0bbec60c5ae92fec8d5dee01f663.jar" />
     </item>
     <item
-        jar="D:\adt-bundle-windows-x86_64\sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-9479cabae9603c7b439e260db9d950fa5d959c2d.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
-        <dex dex="D:\workspace\AndroidStudio\BlunoBasicDemo\app\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-af387c477aa70e60bccb52ecc81b1a461370dc5d.jar" />
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-0b2c50f36dabaefeee496edc7d69269e06b83334.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/classes-269167ee00f2038db2ba0628645d2983b3c7ef1a.jar" />
     </item>
 
 </items>
