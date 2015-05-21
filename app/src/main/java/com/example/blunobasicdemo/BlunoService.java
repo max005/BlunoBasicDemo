@@ -1,8 +1,6 @@
 package com.example.blunobasicdemo;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.Service;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -12,8 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
@@ -23,15 +19,6 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.blunobasicdemo.notification.ActionsPreset;
-import com.example.blunobasicdemo.notification.ActionsPresets;
-import com.example.blunobasicdemo.notification.NotificationIntentReceiver;
-import com.example.blunobasicdemo.notification.NotificationPreset;
-import com.example.blunobasicdemo.notification.NotificationPresets;
-import com.example.blunobasicdemo.notification.PriorityPreset;
-import com.example.blunobasicdemo.notification.PriorityPresets;
-
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -467,7 +454,7 @@ public class BlunoService extends Service {
         }
 
     }
-
+    /*
     private void postNotifications(){
         sendBroadcast(new Intent(NotificationIntentReceiver.ACTION_ENABLE_MESSAGES)
                 .setClass(this, NotificationIntentReceiver.class));
@@ -501,24 +488,30 @@ public class BlunoService extends Service {
         }
         postedNotificationCount = notifications.length;
     }
-
+    */
    public void myNotification(){
        int notificationId = 001;
+
+       NotificationCompat.WearableExtender wearableExtender =
+               new NotificationCompat.WearableExtender()
+                       .setHintHideIcon(true)
+                       .setBackground(BitmapFactory.decodeResource(getResources(), R.drawable.warning));
+
        NotificationCompat.Builder notificationBuilder =
                new NotificationCompat.Builder(this)
                        .setSmallIcon(R.drawable.ic_launcher)
-                       .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.warning))
                        .setContentTitle("危險！")
                        .setContentText(mWarningText)
+                       .extend(wearableExtender)
                        .setPriority(2)
                        .setSound(soundUri)
                        .setVibrate(vibrate);
 
-        // Get an instance of the NotificationManager service
+       // Get an instance of the NotificationManager service
        NotificationManagerCompat notificationManager =
                NotificationManagerCompat.from(this);
 
-        // Build the notification and issues it with notification manager.
+       // Build the notification and issues it with notification manager.
        notificationManager.notify(notificationId, notificationBuilder.build());
    }
 

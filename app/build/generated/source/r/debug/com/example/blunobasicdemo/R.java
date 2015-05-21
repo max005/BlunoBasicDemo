@@ -55,6 +55,12 @@ public final class R {
     }
     public static final class raw {
         public static final int warning=0x7f040000;
+        public static final int warning_front=0x7f040001;
+        public static final int warning_frontleft=0x7f040002;
+        public static final int warning_frontright=0x7f040003;
+        public static final int warning_left=0x7f040004;
+        public static final int warning_right=0x7f040005;
+        public static final int warning_twosides=0x7f040006;
     }
     public static final class string {
         public static final int action_settings=0x7f060000;
