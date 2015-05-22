@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.blunobasicdemo"
-        minSdkVersion 18
-        targetSdkVersion 19
+        minSdkVersion 20
+        targetSdkVersion 22
     }
 
     buildTypes {

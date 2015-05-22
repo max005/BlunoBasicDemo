@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/buttonScan"
-        android:text="ForwardLeft   : "
+        android:text="Front           : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:text="ForwardRight : "
+        android:text="Left             : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -40,20 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView2"
         android:layout_below="@+id/textView2"
-        android:text="Left                  : "
+        android:text="Right           : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_below="@+id/textView3"
-        android:text="Right                : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/ForwardLeft"
+        android:id="@+id/Front"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100"
@@ -62,20 +53,11 @@
         android:layout_toEndOf="@+id/textView1" />
 
     <TextView
-        android:id="@+id/ForwardRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="100"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/textView1"
-        android:layout_toEndOf="@+id/textView2" />
-
-    <TextView
         android:id="@+id/Left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/textView2"
-        android:layout_below="@+id/ForwardRight"
+        android:layout_below="@+id/Front"
         android:text="100"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -83,7 +65,7 @@
         android:id="@+id/Right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView3"
         android:layout_below="@+id/Left"
         android:text="100"
         android:textAppearance="?android:attr/textAppearanceLarge" />

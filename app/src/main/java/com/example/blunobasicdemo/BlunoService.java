@@ -52,12 +52,10 @@ public class BlunoService extends Service {
     public boolean mConnected = false;
     private final static String TAG = BlunoService.class.getSimpleName();
 
-    private int frontLeft  = 100;
-    private int frontRight = 100;
+    private int front  = 100;
     private int left       = 100;
     private int right      = 100;
-    private int frontLeftTemp = 100;
-    private int frontRightTemp = 100;
+    private int frontTemp = 100;
     private int leftTemp = 100;
     private int rightTemp = 100;
     private static int frontThreshold = 50;
@@ -65,13 +63,15 @@ public class BlunoService extends Service {
     //private int postedNotificationCount = 0;
     private theConnectionState mConnectionState;
     protected enum warningState{
-        left, right, frontLeft, frontRight, front, twoSide,frontAndLeft, frontAndRight, allDirection, safe, others
+        left, right, front, twoSide,frontAndLeft, frontAndRight, allDirection, safe, others
     }
     private warningState mWarningState;
     private String mWarningText;
     private int mWarningCount = 0;
+    private static final int mWarningCountThreshold = 7;
     private Uri soundUri;
-    private static long[] vibrate = {0, 100, 500, 100, 500};
+    private long[] vibrate = {0, 100, 500, 100, 500};
+    //private static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
 
     private Runnable mConnectingOverTimeRunnable=new Runnable(){
 
@@ -334,38 +334,37 @@ public class BlunoService extends Service {
 
     public void onSerialReceived(String theString){
         String[] buffer = theString.split(",");
-        Log.i("test", "onSerialRcecived");
+        Log.i("Service Log", "onSerialRcecived");
         try{
-            frontLeft  = Integer.parseInt(buffer[0]);
-            frontRight = Integer.parseInt(buffer[1]);
-            left         = Integer.parseInt(buffer[2]);
-            right        = Integer.parseInt(buffer[3]);
+            front  = Integer.parseInt(buffer[0]);
+            left   = Integer.parseInt(buffer[1]);
+            right  = Integer.parseInt(buffer[2]);
             stateProcess();
-            transferIntent.putExtra("forwardLeft", frontLeft);
-            transferIntent.putExtra("forwardRight", frontRight);
+            transferIntent.putExtra("front", front);
             transferIntent.putExtra("left", left);
             transferIntent.putExtra("right", right);
             sendBroadcast(transferIntent);
+
         }catch(Exception e){
-            Log.e("test", "[Error onSerialReceived]: "+e.toString());
+            Log.e("Service Log", "[Error onSerialReceived]: "+e.toString());
         }
     }
 
     public void stateProcess(){
-        if((left > sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold) ||
-                mWarningCount > 7){
+        if((left > sideThreshold && right > sideThreshold && front > frontThreshold) || mWarningCount > mWarningCountThreshold){
             mWarningState = warningState.safe;
-            if(mWarningCount > 8 && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
-                    Math.abs(frontLeft-frontLeftTemp) > 20 || Math.abs(frontRight-frontRightTemp) > 20)){
+            if(mWarningCount > (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
+                    Math.abs(front-frontTemp) > 20)){
                 mWarningCount = 0;
             }
             leftTemp = left;
             rightTemp = right;
-            frontLeftTemp = frontLeft;
-            frontRightTemp = frontRight;
+            frontTemp = front;
             mWarningCount += 1;
         }
-        else if(left < sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+        else if(left < sideThreshold && right > sideThreshold && front > frontThreshold){
+            if(mWarningState != warningState.left)
+                mWarningCount = 0;
             mWarningState = warningState.left;
             mWarningText = "左方危險, 注意";
             mWarningCount += 1;
@@ -374,7 +373,9 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+        else if(left > sideThreshold && right < sideThreshold && front > frontThreshold){
+            if(mWarningState != warningState.right)
+                mWarningCount = 0;
             mWarningState = warningState.right;
             mWarningText = "右方危險, 注意";
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_right);
@@ -382,22 +383,10 @@ public class BlunoService extends Service {
             mWarningCount += 1;
             //postNotifications();
             myNotification();
-        }/*
-        else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight > frontThreshold){
-            mWarningState = warningState.frontLeft;
-            mWarningText = "左前方危險, 注意";
-            mWarningCount += 1;
-            //postNotifications();
-            myNotification();
         }
-        else if(left > sideThreshold && right > sideThreshold && frontLeft > frontThreshold && frontRight < frontThreshold){
-            mWarningState = warningState.frontRight;
-            mWarningText = "右前方危險, 注意";
-            mWarningCount += 1;
-            //postNotifications();
-            myNotification();
-        }*/
-        else if(left < sideThreshold && right < sideThreshold && frontLeft > frontThreshold && frontRight > frontThreshold){
+        else if(left < sideThreshold && right < sideThreshold && front > frontThreshold){
+            if(mWarningState != warningState.twoSide)
+                mWarningCount = 0;
             mWarningState = warningState.twoSide;
             mWarningText = "兩側危險, 注意";
             mWarningCount += 1;
@@ -406,7 +395,9 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+        else if(left > sideThreshold && right > sideThreshold && front < frontThreshold){
+            if(mWarningState != warningState.front)
+                mWarningCount = 0;
             mWarningState = warningState.front;
             mWarningText = "前方危險, 注意";
             mWarningCount += 1;
@@ -416,7 +407,9 @@ public class BlunoService extends Service {
             myNotification();
         }
 
-        else if(left < sideThreshold && right < sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+        else if(left < sideThreshold && right < sideThreshold && front < frontThreshold){
+            if(mWarningState != warningState.allDirection)
+                mWarningCount = 0;
             mWarningState = warningState.allDirection;
             mWarningText = "密集區域, 注意";
             mWarningCount += 1;
@@ -425,7 +418,9 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left < sideThreshold && right > sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+        else if(left < sideThreshold && right > sideThreshold && front < frontThreshold){
+            if(mWarningState != warningState.frontAndLeft)
+                mWarningCount = 0;
             mWarningState = warningState.frontAndLeft;
             mWarningText = "前方與左方危險, 注意";
             mWarningCount += 1;
@@ -434,7 +429,9 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right < sideThreshold && frontLeft < frontThreshold && frontRight < frontThreshold){
+        else if(left > sideThreshold && right < sideThreshold && front < frontThreshold){
+            if(mWarningState != warningState.frontAndRight)
+                mWarningCount = 0;
             mWarningState = warningState.frontAndRight;
             mWarningText = "前方與右方危險, 注意";
             mWarningCount += 1;
@@ -444,6 +441,8 @@ public class BlunoService extends Service {
             myNotification();
         }
         else{
+            if(mWarningState != warningState.others)
+                mWarningCount = 0;
             mWarningState = warningState.others;
             mWarningText = "注意";
             mWarningCount += 1;
@@ -491,6 +490,22 @@ public class BlunoService extends Service {
     */
    public void myNotification(){
        int notificationId = 001;
+       /*
+       String[] replyChoices = getResources().getStringArray(R.array.reply_choices);
+
+       RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
+               .setLabel("Reply")
+               .setChoices(replyChoices)
+               .build();
+
+       Intent replyIntent = new Intent(this, BlunoService.class);
+       PendingIntent replyPendingIntent = PendingIntent.getService(this, 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+       NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(R.drawable.ic_full_reply,
+               "Reply", replyPendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .build();
+       */
 
        NotificationCompat.WearableExtender wearableExtender =
                new NotificationCompat.WearableExtender()
@@ -514,6 +529,16 @@ public class BlunoService extends Service {
        // Build the notification and issues it with notification manager.
        notificationManager.notify(notificationId, notificationBuilder.build());
    }
+
+    /*
+    private CharSequence getMessageText(Intent intent) {
+        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        if (remoteInput != null) {
+            return remoteInput.getCharSequence(EXTRA_VOICE_REPLY);
+        }
+        return null;
+    }
+    */
 
     public class MsgReceiver extends BroadcastReceiver{
         @Override

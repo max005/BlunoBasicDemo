@@ -199,6 +199,11 @@
     <string name="maybe">Maybe</string>
 
     <string name="bg_picker_label">Page %s background: </string>
+
+    <string-array name="reply_choices">
+        <item>turn off</item>
+        <item>turn on</item>
+    </string-array>
     
 
 </resources>

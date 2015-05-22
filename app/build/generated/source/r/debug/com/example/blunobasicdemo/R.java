@@ -8,11 +8,14 @@
 package com.example.blunobasicdemo;
 
 public final class R {
+    public static final class array {
+        public static final int reply_choices=0x7f050000;
+    }
     public static final class attr {
     }
     public static final class dimen {
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
         public static final int bg_1=0x7f020000;
@@ -33,25 +36,24 @@ public final class R {
         public static final int warning=0x7f02000f;
     }
     public static final class id {
-        public static final int ForwardLeft=0x7f090005;
-        public static final int ForwardRight=0x7f090006;
-        public static final int Left=0x7f090007;
-        public static final int Right=0x7f090008;
-        public static final int action_settings=0x7f09000b;
-        public static final int buttonScan=0x7f090000;
-        public static final int device_address=0x7f09000a;
-        public static final int device_name=0x7f090009;
-        public static final int textView1=0x7f090001;
-        public static final int textView2=0x7f090002;
-        public static final int textView3=0x7f090003;
-        public static final int textView4=0x7f090004;
+        public static final int Front=0x7f0a0004;
+        public static final int Left=0x7f0a0005;
+        public static final int Right=0x7f0a0006;
+        public static final int action_settings=0x7f0a000a;
+        public static final int buttonScan=0x7f0a0000;
+        public static final int device_address=0x7f0a0009;
+        public static final int device_name=0x7f0a0008;
+        public static final int textView1=0x7f0a0001;
+        public static final int textView2=0x7f0a0002;
+        public static final int textView3=0x7f0a0003;
+        public static final int textView4=0x7f0a0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int listitem_device=0x7f030001;
     }
     public static final class menu {
-        public static final int main=0x7f080000;
+        public static final int main=0x7f090000;
     }
     public static final class raw {
         public static final int warning=0x7f040000;
@@ -63,102 +65,102 @@ public final class R {
         public static final int warning_twosides=0x7f040006;
     }
     public static final class string {
-        public static final int action_settings=0x7f060000;
-        public static final int actions=0x7f060001;
-        public static final int app_name=0x7f060002;
-        public static final int barcode_content_text=0x7f060003;
-        public static final int barcode_content_title=0x7f060004;
-        public static final int barcode_example=0x7f060005;
-        public static final int basic_example=0x7f060006;
-        public static final int bg_picker_label=0x7f060007;
-        public static final int big_picture_example=0x7f060008;
-        public static final int big_picture_style_example_summary_text=0x7f060009;
-        public static final int big_picture_style_example_title=0x7f06000a;
-        public static final int big_text_example=0x7f06000b;
-        public static final int big_text_example_big_text=0x7f06000c;
-        public static final int big_text_example_summary_text=0x7f06000d;
-        public static final int big_text_example_title=0x7f06000e;
-        public static final int ble_not_supported=0x7f06000f;
-        public static final int bottom_aligned_example=0x7f060010;
-        public static final int bundle_example=0x7f060011;
-        public static final int connected=0x7f060012;
-        public static final int content_action_example=0x7f060013;
-        public static final int content_icon_example=0x7f060014;
-        public static final int content_intent_clicked=0x7f060015;
-        public static final int default_priority=0x7f060016;
-        public static final int different_actions_on_phone_and_wearable=0x7f060017;
-        public static final int disconnected=0x7f060018;
-        public static final int error_bluetooth_not_supported=0x7f060019;
-        public static final int example_action=0x7f06001a;
-        public static final int example_action_clicked=0x7f06001b;
-        public static final int example_action_long_title=0x7f06001c;
-        public static final int example_content_action2_clicked=0x7f06001d;
-        public static final int example_content_action_clicked=0x7f06001e;
-        public static final int example_content_text=0x7f06001f;
-        public static final int example_content_title=0x7f060020;
-        public static final int example_notification_deleted=0x7f060021;
-        public static final int example_reply_action=0x7f060022;
-        public static final int example_reply_action_clicked=0x7f060023;
-        public static final int example_reply_answer_label=0x7f060024;
-        public static final int example_reply_label=0x7f060025;
-        public static final int first_child_content_text=0x7f060026;
-        public static final int first_child_content_title=0x7f060027;
-        public static final int fourth_page_content_text=0x7f060028;
-        public static final int fourth_page_content_title=0x7f060029;
-        public static final int gravity_example=0x7f06002a;
-        public static final int high_priority=0x7f06002b;
-        public static final int inbox_example=0x7f06002c;
-        public static final int inbox_style_example_line1=0x7f06002d;
-        public static final int inbox_style_example_line2=0x7f06002e;
-        public static final int inbox_style_example_line3=0x7f06002f;
-        public static final int inbox_style_example_summary_text=0x7f060030;
-        public static final int inbox_style_example_title=0x7f060031;
-        public static final int include_content_intent=0x7f060032;
-        public static final int include_large_icon=0x7f060033;
-        public static final int label_data=0x7f060034;
-        public static final int label_device_address=0x7f060035;
-        public static final int label_state=0x7f060036;
-        public static final int local_only=0x7f060037;
-        public static final int long_title_action=0x7f060038;
-        public static final int low_priority=0x7f060039;
-        public static final int max_priority=0x7f06003a;
-        public static final int maybe=0x7f06003b;
-        public static final int menu_connect=0x7f06003c;
-        public static final int menu_disconnect=0x7f06003d;
-        public static final int menu_scan=0x7f06003e;
-        public static final int menu_stop=0x7f06003f;
-        public static final int min_priority=0x7f060040;
-        public static final int multiple_page_example=0x7f060041;
-        public static final int no=0x7f060042;
-        public static final int no_actions=0x7f060043;
-        public static final int no_data=0x7f060044;
-        public static final int phone_action=0x7f060045;
-        public static final int phone_action_clicked=0x7f060046;
-        public static final int preset=0x7f060047;
-        public static final int priority=0x7f060048;
-        public static final int properties=0x7f060049;
-        public static final int reply_action=0x7f06004a;
-        public static final int reply_action_with_choices=0x7f06004b;
-        public static final int second_child_action=0x7f06004c;
-        public static final int second_child_action_clicked=0x7f06004d;
-        public static final int second_child_content_text=0x7f06004e;
-        public static final int second_child_content_title=0x7f06004f;
-        public static final int second_page_content_text=0x7f060050;
-        public static final int second_page_content_title=0x7f060051;
-        public static final int single_action=0x7f060052;
-        public static final int stylized_text_example=0x7f060053;
-        public static final int text=0x7f060054;
-        public static final int third_page_content_text=0x7f060055;
-        public static final int third_page_content_title=0x7f060056;
-        public static final int title=0x7f060057;
-        public static final int title_devices=0x7f060058;
-        public static final int unknown_characteristic=0x7f060059;
-        public static final int unknown_device=0x7f06005a;
-        public static final int unknown_service=0x7f06005b;
-        public static final int vibrate=0x7f06005c;
-        public static final int wearable_action=0x7f06005d;
-        public static final int wearable_action_clicked=0x7f06005e;
-        public static final int yes=0x7f06005f;
+        public static final int action_settings=0x7f070000;
+        public static final int actions=0x7f070001;
+        public static final int app_name=0x7f070002;
+        public static final int barcode_content_text=0x7f070003;
+        public static final int barcode_content_title=0x7f070004;
+        public static final int barcode_example=0x7f070005;
+        public static final int basic_example=0x7f070006;
+        public static final int bg_picker_label=0x7f070007;
+        public static final int big_picture_example=0x7f070008;
+        public static final int big_picture_style_example_summary_text=0x7f070009;
+        public static final int big_picture_style_example_title=0x7f07000a;
+        public static final int big_text_example=0x7f07000b;
+        public static final int big_text_example_big_text=0x7f07000c;
+        public static final int big_text_example_summary_text=0x7f07000d;
+        public static final int big_text_example_title=0x7f07000e;
+        public static final int ble_not_supported=0x7f07000f;
+        public static final int bottom_aligned_example=0x7f070010;
+        public static final int bundle_example=0x7f070011;
+        public static final int connected=0x7f070012;
+        public static final int content_action_example=0x7f070013;
+        public static final int content_icon_example=0x7f070014;
+        public static final int content_intent_clicked=0x7f070015;
+        public static final int default_priority=0x7f070016;
+        public static final int different_actions_on_phone_and_wearable=0x7f070017;
+        public static final int disconnected=0x7f070018;
+        public static final int error_bluetooth_not_supported=0x7f070019;
+        public static final int example_action=0x7f07001a;
+        public static final int example_action_clicked=0x7f07001b;
+        public static final int example_action_long_title=0x7f07001c;
+        public static final int example_content_action2_clicked=0x7f07001d;
+        public static final int example_content_action_clicked=0x7f07001e;
+        public static final int example_content_text=0x7f07001f;
+        public static final int example_content_title=0x7f070020;
+        public static final int example_notification_deleted=0x7f070021;
+        public static final int example_reply_action=0x7f070022;
+        public static final int example_reply_action_clicked=0x7f070023;
+        public static final int example_reply_answer_label=0x7f070024;
+        public static final int example_reply_label=0x7f070025;
+        public static final int first_child_content_text=0x7f070026;
+        public static final int first_child_content_title=0x7f070027;
+        public static final int fourth_page_content_text=0x7f070028;
+        public static final int fourth_page_content_title=0x7f070029;
+        public static final int gravity_example=0x7f07002a;
+        public static final int high_priority=0x7f07002b;
+        public static final int inbox_example=0x7f07002c;
+        public static final int inbox_style_example_line1=0x7f07002d;
+        public static final int inbox_style_example_line2=0x7f07002e;
+        public static final int inbox_style_example_line3=0x7f07002f;
+        public static final int inbox_style_example_summary_text=0x7f070030;
+        public static final int inbox_style_example_title=0x7f070031;
+        public static final int include_content_intent=0x7f070032;
+        public static final int include_large_icon=0x7f070033;
+        public static final int label_data=0x7f070034;
+        public static final int label_device_address=0x7f070035;
+        public static final int label_state=0x7f070036;
+        public static final int local_only=0x7f070037;
+        public static final int long_title_action=0x7f070038;
+        public static final int low_priority=0x7f070039;
+        public static final int max_priority=0x7f07003a;
+        public static final int maybe=0x7f07003b;
+        public static final int menu_connect=0x7f07003c;
+        public static final int menu_disconnect=0x7f07003d;
+        public static final int menu_scan=0x7f07003e;
+        public static final int menu_stop=0x7f07003f;
+        public static final int min_priority=0x7f070040;
+        public static final int multiple_page_example=0x7f070041;
+        public static final int no=0x7f070042;
+        public static final int no_actions=0x7f070043;
+        public static final int no_data=0x7f070044;
+        public static final int phone_action=0x7f070045;
+        public static final int phone_action_clicked=0x7f070046;
+        public static final int preset=0x7f070047;
+        public static final int priority=0x7f070048;
+        public static final int properties=0x7f070049;
+        public static final int reply_action=0x7f07004a;
+        public static final int reply_action_with_choices=0x7f07004b;
+        public static final int second_child_action=0x7f07004c;
+        public static final int second_child_action_clicked=0x7f07004d;
+        public static final int second_child_content_text=0x7f07004e;
+        public static final int second_child_content_title=0x7f07004f;
+        public static final int second_page_content_text=0x7f070050;
+        public static final int second_page_content_title=0x7f070051;
+        public static final int single_action=0x7f070052;
+        public static final int stylized_text_example=0x7f070053;
+        public static final int text=0x7f070054;
+        public static final int third_page_content_text=0x7f070055;
+        public static final int third_page_content_title=0x7f070056;
+        public static final int title=0x7f070057;
+        public static final int title_devices=0x7f070058;
+        public static final int unknown_characteristic=0x7f070059;
+        public static final int unknown_device=0x7f07005a;
+        public static final int unknown_service=0x7f07005b;
+        public static final int vibrate=0x7f07005c;
+        public static final int wearable_action=0x7f07005d;
+        public static final int wearable_action_clicked=0x7f07005e;
+        public static final int yes=0x7f07005f;
     }
     public static final class style {
         /** 
@@ -169,9 +171,9 @@ public final class R {
  API 11 theme customizations can go here. 
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070000;
+        public static final int AppBaseTheme=0x7f080000;
         /**  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070001;
+        public static final int AppTheme=0x7f080001;
     }
 }
