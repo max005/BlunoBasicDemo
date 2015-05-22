@@ -12,9 +12,9 @@
         android:id="@+id/buttonScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Scan"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Scan" />
+        android:layout_toStartOf="@+id/Front" />
 
     <TextView
         android:id="@+id/textView1"
@@ -69,5 +69,13 @@
         android:layout_below="@+id/Left"
         android:text="100"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disconnect"
+        android:id="@+id/buttonDisconnect"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/Front" />
 
 </RelativeLayout>

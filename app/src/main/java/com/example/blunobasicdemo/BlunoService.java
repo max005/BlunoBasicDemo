@@ -1,6 +1,7 @@
 package com.example.blunobasicdemo;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -490,22 +491,9 @@ public class BlunoService extends Service {
     */
    public void myNotification(){
        int notificationId = 001;
-       /*
-       String[] replyChoices = getResources().getStringArray(R.array.reply_choices);
-
-       RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
-               .setLabel("Reply")
-               .setChoices(replyChoices)
-               .build();
-
-       Intent replyIntent = new Intent(this, BlunoService.class);
-       PendingIntent replyPendingIntent = PendingIntent.getService(this, 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-       NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(R.drawable.ic_full_reply,
-               "Reply", replyPendingIntent)
-                        .addRemoteInput(remoteInput)
-                        .build();
-       */
+       Intent openIntent = new Intent(this, MainActivity.class);
+       openIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+       PendingIntent openPendingIntent = PendingIntent.getActivity(this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
        NotificationCompat.WearableExtender wearableExtender =
                new NotificationCompat.WearableExtender()
@@ -517,6 +505,7 @@ public class BlunoService extends Service {
                        .setSmallIcon(R.drawable.ic_launcher)
                        .setContentTitle("危險！")
                        .setContentText(mWarningText)
+                       .setContentIntent(openPendingIntent)
                        .extend(wearableExtender)
                        .setPriority(2)
                        .setSound(soundUri)

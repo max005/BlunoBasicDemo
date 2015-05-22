@@ -1,5 +1,6 @@
 package com.example.blunobasicdemo;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +12,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity  extends BlunoLibrary {
 	private Button buttonScan;
+	private Button buttonDisconnect;
 	private TextView serialReceivedFront;
 	private TextView serialReceivedLeft;
 	private TextView serialReceivedRight;
@@ -29,6 +33,7 @@ public class MainActivity  extends BlunoLibrary {
 		setContentView(R.layout.activity_main);
 		onCreateProcess();
         buttonScan=(Button) findViewById(R.id.buttonScan);
+		buttonDisconnect=(Button) findViewById(R.id.buttonDisconnect);
 		serialReceivedFront=(TextView) findViewById(R.id.Front);
 		serialReceivedLeft=(TextView) findViewById(R.id.Left);
         serialReceivedRight=(TextView) findViewById(R.id.Right);
@@ -36,7 +41,25 @@ public class MainActivity  extends BlunoLibrary {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if(!isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
+					onCreateProcess();
+
+					Intent intent = new Intent(MainActivity.this, BlunoService.class);
+					startService(intent);
+				}
 				buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device
+			}
+		});
+		buttonDisconnect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
+					Intent intent = new Intent(MainActivity.this, BlunoService.class);
+					stopService(intent);                                        //Alert Dialog for selecting the BLE device
+					mConnectionState = theConnectionState.isToScan;
+					onConectionStateChange(mConnectionState);
+				}
 			}
 		});
 
@@ -71,8 +94,6 @@ public class MainActivity  extends BlunoLibrary {
     protected void onDestroy() {
         super.onDestroy();
 		unregisterReceiver(msgReceiver);
-		Intent intent = new Intent(MainActivity.this, BlunoService.class);
-		stopService(intent);
 	}
 
 	public class MsgReceiver extends BroadcastReceiver{
@@ -89,6 +110,18 @@ public class MainActivity  extends BlunoLibrary {
 			serialReceivedLeft.setText(Integer.toString(left));
 			serialReceivedRight.setText(Integer.toString(right));
 		}
+	}
+
+	public static boolean isServiceRunning(Context context, String serviceClassName){
+		final ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+		final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+		for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+			if (runningServiceInfo.service.getClassName().equals(serviceClassName)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void buttonScanOnClickProcess()
