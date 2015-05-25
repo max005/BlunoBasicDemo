@@ -2,60 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.support/wearable/1.1.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="27f19641b81b1078e653d2f0e5d1ed44d158a785">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-c10be3e9b6d9401d2f641ac6123df27f40efa031.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="3033cc3a2c68dff3e5b646d6d084bdbdf7d00b25">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-85febc3b53b1284ffaefd8aa7f7b0e3cf75d72ab.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-b51f7817137579ee29fd333a830d9963e6d72fec.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-7806c40859204c6e7279be35aec8c2df19b9a67a.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-c94927bd92c1f6ea3f714fc36352937ebeef4118.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4c93d99d454c975536bbe3b42283eee847f03ea3">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/classes-3967e03cdb1df353b572f3ede4595b1960abcfc0.jar" />
-    </item>
-    <item
         jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
         <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-2ab8389b39ee0bbec60c5ae92fec8d5dee01f663.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/wearable/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-9479cabae9603c7b439e260db9d950fa5d959c2d.jar" />
     </item>
     <item
         jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"

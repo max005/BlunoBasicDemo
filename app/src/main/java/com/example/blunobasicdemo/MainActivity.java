@@ -162,8 +162,6 @@ public class MainActivity  extends BlunoLibrary {
 				break;
 			case isConnecting:
 				buttonScan.setText("Connecting");
-				//Intent intent = new Intent(MainActivity.this, BlunoService.class);
-				//startService(intent);
 				transferIntent.putExtra("mDeviceAddress", mDeviceAddress);
 				transferIntent.putExtra("connectionState", connectionState);
 				sendBroadcast(transferIntent);

@@ -34,6 +34,7 @@ public class BlunoService extends Service {
     private Intent transferIntent = new Intent("com.example.blunobasicdemo.RECEIVER_ACTIVITY");
     private Context serviceContext=this;
     private MsgReceiver msgReceiver;
+    private DeleteReceiver deleteReceiver;
     private int mBaudrate=115200;
     BluetoothLeService mBluetoothLeService;
     public String connectionState;
@@ -69,6 +70,7 @@ public class BlunoService extends Service {
     private warningState mWarningState;
     private String mWarningText;
     private int mWarningCount = 0;
+    private boolean turnOff = false;
     private static final int mWarningCountThreshold = 7;
     private Uri soundUri;
     private long[] vibrate = {0, 100, 500, 100, 500};
@@ -122,7 +124,7 @@ public class BlunoService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.i("服務", "建立");
+        Log.i("BlunoService", "Create");
         onCreateProcess();
         serialBegin(115200);
     }
@@ -130,7 +132,7 @@ public class BlunoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // TODO Auto-generated method stub
-        Log.i("服務", "執行");
+        Log.i("BlunoService", "Start");
         onStartProcess();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -139,7 +141,7 @@ public class BlunoService extends Service {
     public void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        Log.i("服務", "銷毀");
+        Log.i("BlunoService", "Destroy");
         onDestroyProcess();
     }
 
@@ -156,6 +158,11 @@ public class BlunoService extends Service {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.blunobasicdemo.RECEIVER_SERVICE");
         registerReceiver(msgReceiver, intentFilter);
+
+        deleteReceiver = new DeleteReceiver();
+        IntentFilter deleteIntentFilter = new IntentFilter();
+        deleteIntentFilter.addAction("com.example.blunobasicdemo.RECEIVER_DELETE");
+        registerReceiver(deleteReceiver, deleteIntentFilter);
 
         System.out.println("BlunoService onCreate");
     }
@@ -335,7 +342,7 @@ public class BlunoService extends Service {
 
     public void onSerialReceived(String theString){
         String[] buffer = theString.split(",");
-        Log.i("Service Log", "onSerialRcecived");
+        Log.i("BlunoService", "onSerialRcecived");
         try{
             front  = Integer.parseInt(buffer[0]);
             left   = Integer.parseInt(buffer[1]);
@@ -345,23 +352,32 @@ public class BlunoService extends Service {
             transferIntent.putExtra("left", left);
             transferIntent.putExtra("right", right);
             sendBroadcast(transferIntent);
+            Log.i("BlunoService", "Warning Count = " + mWarningCount);
 
         }catch(Exception e){
-            Log.e("Service Log", "[Error onSerialReceived]: "+e.toString());
+            Log.e("BlunoService", "[Error onSerialReceived]: "+e.toString());
         }
     }
 
     public void stateProcess(){
-        if((left > sideThreshold && right > sideThreshold && front > frontThreshold) || mWarningCount > mWarningCountThreshold){
+        if(turnOff == true) {
+            if(mWarningCount >= mWarningCountThreshold)
+                mWarningCount++;
+            else
+                mWarningCount = mWarningCountThreshold;
+        }
+
+        if((left > sideThreshold && right > sideThreshold && front > frontThreshold) || mWarningCount >= mWarningCountThreshold){
             mWarningState = warningState.safe;
-            if(mWarningCount > (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
+            turnOff = true;
+            if(mWarningCount >= (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
                     Math.abs(front-frontTemp) > 20)){
                 mWarningCount = 0;
+                turnOff = false;
             }
             leftTemp = left;
             rightTemp = right;
             frontTemp = front;
-            mWarningCount += 1;
         }
         else if(left < sideThreshold && right > sideThreshold && front > frontThreshold){
             if(mWarningState != warningState.left)
@@ -491,9 +507,14 @@ public class BlunoService extends Service {
     */
    public void myNotification(){
        int notificationId = 001;
+
        Intent openIntent = new Intent(this, MainActivity.class);
        openIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
        PendingIntent openPendingIntent = PendingIntent.getActivity(this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+       Intent deleteIntent = new Intent(this, DeleteService.class);
+       PendingIntent deletePendingIntent = PendingIntent.getService(this, 0, deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
        NotificationCompat.WearableExtender wearableExtender =
                new NotificationCompat.WearableExtender()
@@ -506,8 +527,10 @@ public class BlunoService extends Service {
                        .setContentTitle("危險！")
                        .setContentText(mWarningText)
                        .setContentIntent(openPendingIntent)
+                       .setDeleteIntent(deletePendingIntent)
+                       .addAction(R.drawable.ic_full_reply, "Turn Off", deletePendingIntent)
                        .extend(wearableExtender)
-                       .setPriority(2)
+                       .setPriority(NotificationCompat.PRIORITY_MAX)
                        .setSound(soundUri)
                        .setVibrate(vibrate);
 
@@ -518,16 +541,6 @@ public class BlunoService extends Service {
        // Build the notification and issues it with notification manager.
        notificationManager.notify(notificationId, notificationBuilder.build());
    }
-
-    /*
-    private CharSequence getMessageText(Intent intent) {
-        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        if (remoteInput != null) {
-            return remoteInput.getCharSequence(EXTRA_VOICE_REPLY);
-        }
-        return null;
-    }
-    */
 
     public class MsgReceiver extends BroadcastReceiver{
         @Override
@@ -549,6 +562,13 @@ public class BlunoService extends Service {
                 mConnectionState = theConnectionState.valueOf(connectionState);
                 onConectionStateChange(mConnectionState);
             }
+        }
+    }
+
+    public class DeleteReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            turnOff = intent.getBooleanExtra("turnOff", turnOff);
         }
     }
 }

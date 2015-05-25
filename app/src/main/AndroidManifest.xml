@@ -35,6 +35,7 @@
         </activity>
         <service android:name=".BluetoothLeService" android:enabled="true"/>
         <service android:name=".BlunoService" android:enabled="true"/>
+        <service android:name=".DeleteService" android:enabled="true"/>
         
     </application>
 
