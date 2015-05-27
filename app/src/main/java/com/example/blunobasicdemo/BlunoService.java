@@ -34,6 +34,7 @@ public class BlunoService extends Service {
     private Intent transferIntent = new Intent("com.example.blunobasicdemo.RECEIVER_ACTIVITY");
     private Context serviceContext=this;
     private MsgReceiver msgReceiver;
+    private ThresholdReceiver thresholdReceiver;
     private DeleteReceiver deleteReceiver;
     private int mBaudrate=115200;
     BluetoothLeService mBluetoothLeService;
@@ -60,8 +61,8 @@ public class BlunoService extends Service {
     private int frontTemp = 100;
     private int leftTemp = 100;
     private int rightTemp = 100;
-    private static int frontThreshold = 50;
-    private static int sideThreshold = 35;
+    private int frontThreshold = 50;
+    private int sidesThreshold = 50;
     //private int postedNotificationCount = 0;
     private theConnectionState mConnectionState;
     protected enum warningState{
@@ -71,7 +72,7 @@ public class BlunoService extends Service {
     private String mWarningText;
     private int mWarningCount = 0;
     private boolean turnOff = false;
-    private static final int mWarningCountThreshold = 7;
+    private static final int mWarningCountThreshold = 30;
     private Uri soundUri;
     private long[] vibrate = {0, 100, 500, 100, 500};
     //private static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
@@ -158,6 +159,11 @@ public class BlunoService extends Service {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.blunobasicdemo.RECEIVER_SERVICE");
         registerReceiver(msgReceiver, intentFilter);
+
+        thresholdReceiver = new ThresholdReceiver();
+        IntentFilter thresholdIntentFilter = new IntentFilter();
+        thresholdIntentFilter.addAction("com.example.blunobasicdemo.RECEIVER_THRESHOLD");
+        registerReceiver(thresholdReceiver, thresholdIntentFilter);
 
         deleteReceiver = new DeleteReceiver();
         IntentFilter deleteIntentFilter = new IntentFilter();
@@ -367,9 +373,9 @@ public class BlunoService extends Service {
                 mWarningCount = mWarningCountThreshold;
         }
 
-        if((left > sideThreshold && right > sideThreshold && front > frontThreshold) || mWarningCount >= mWarningCountThreshold){
+        if((left > sidesThreshold && right > sidesThreshold && front > frontThreshold) || mWarningCount >= mWarningCountThreshold){
             mWarningState = warningState.safe;
-            turnOff = true;
+            //turnOff = true;
             if(mWarningCount >= (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
                     Math.abs(front-frontTemp) > 20)){
                 mWarningCount = 0;
@@ -379,7 +385,7 @@ public class BlunoService extends Service {
             rightTemp = right;
             frontTemp = front;
         }
-        else if(left < sideThreshold && right > sideThreshold && front > frontThreshold){
+        else if(left < sidesThreshold && right > sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.left)
                 mWarningCount = 0;
             mWarningState = warningState.left;
@@ -390,7 +396,7 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right < sideThreshold && front > frontThreshold){
+        else if(left > sidesThreshold && right < sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.right)
                 mWarningCount = 0;
             mWarningState = warningState.right;
@@ -401,7 +407,7 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left < sideThreshold && right < sideThreshold && front > frontThreshold){
+        else if(left < sidesThreshold && right < sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.twoSide)
                 mWarningCount = 0;
             mWarningState = warningState.twoSide;
@@ -412,7 +418,7 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right > sideThreshold && front < frontThreshold){
+        else if(left > sidesThreshold && right > sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.front)
                 mWarningCount = 0;
             mWarningState = warningState.front;
@@ -424,7 +430,7 @@ public class BlunoService extends Service {
             myNotification();
         }
 
-        else if(left < sideThreshold && right < sideThreshold && front < frontThreshold){
+        else if(left < sidesThreshold && right < sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.allDirection)
                 mWarningCount = 0;
             mWarningState = warningState.allDirection;
@@ -435,7 +441,7 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left < sideThreshold && right > sideThreshold && front < frontThreshold){
+        else if(left < sidesThreshold && right > sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.frontAndLeft)
                 mWarningCount = 0;
             mWarningState = warningState.frontAndLeft;
@@ -446,7 +452,7 @@ public class BlunoService extends Service {
             //postNotifications();
             myNotification();
         }
-        else if(left > sideThreshold && right < sideThreshold && front < frontThreshold){
+        else if(left > sidesThreshold && right < sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.frontAndRight)
                 mWarningCount = 0;
             mWarningState = warningState.frontAndRight;
@@ -530,7 +536,7 @@ public class BlunoService extends Service {
                        .setDeleteIntent(deletePendingIntent)
                        .addAction(R.drawable.ic_full_reply, "Turn Off", deletePendingIntent)
                        .extend(wearableExtender)
-                       .setPriority(NotificationCompat.PRIORITY_MAX)
+                       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                        .setSound(soundUri)
                        .setVibrate(vibrate);
 
@@ -562,6 +568,14 @@ public class BlunoService extends Service {
                 mConnectionState = theConnectionState.valueOf(connectionState);
                 onConectionStateChange(mConnectionState);
             }
+        }
+    }
+
+    public class ThresholdReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            frontThreshold = intent.getIntExtra("frontThreshold", frontThreshold);
+            sidesThreshold = intent.getIntExtra("sidesThreshold", sidesThreshold);
         }
     }
 

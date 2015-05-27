@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,48 +21,30 @@ public class MainActivity  extends BlunoLibrary {
 	private TextView serialReceivedFront;
 	private TextView serialReceivedLeft;
 	private TextView serialReceivedRight;
+	private SeekBar frontThresholdBar;
+	private TextView frontThresholdValue;
+	private SeekBar sidesThresholdBar;
+	private TextView sidesThresholdValue;
 	private MsgReceiver msgReceiver;
 	private Intent transferIntent = new Intent("com.example.blunobasicdemo.RECEIVER_SERVICE");
+    private Intent thresholdIntent = new Intent("com.example.blunobasicdemo.RECEIVER_THRESHOLD");
 
 	private int front  = 0;
 	private int left   = 0;
 	private int right  = 0;
+    private static int thresholdMin = 35;
+    private int frontThreshold;
+    private int sidesThreshold;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		onCreateProcess();
-        buttonScan=(Button) findViewById(R.id.buttonScan);
-		buttonDisconnect=(Button) findViewById(R.id.buttonDisconnect);
-		serialReceivedFront=(TextView) findViewById(R.id.Front);
-		serialReceivedLeft=(TextView) findViewById(R.id.Left);
-        serialReceivedRight=(TextView) findViewById(R.id.Right);
-		buttonScan.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(!isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
-					onCreateProcess();
-
-					Intent intent = new Intent(MainActivity.this, BlunoService.class);
-					startService(intent);
-				}
-				buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device
-			}
-		});
-		buttonDisconnect.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
-					Intent intent = new Intent(MainActivity.this, BlunoService.class);
-					stopService(intent);                                        //Alert Dialog for selecting the BLE device
-					mConnectionState = theConnectionState.isToScan;
-					onConectionStateChange(mConnectionState);
-				}
-			}
-		});
+        findView();
+		setButton();
+        setSeekBar();
 
 		msgReceiver = new MsgReceiver();
 		IntentFilter intentFilter = new IntentFilter();
@@ -95,6 +78,91 @@ public class MainActivity  extends BlunoLibrary {
         super.onDestroy();
 		unregisterReceiver(msgReceiver);
 	}
+
+    public void findView(){
+        buttonScan=(Button) findViewById(R.id.buttonScan);
+        buttonDisconnect=(Button) findViewById(R.id.buttonDisconnect);
+        serialReceivedFront=(TextView) findViewById(R.id.Front);
+        serialReceivedLeft=(TextView) findViewById(R.id.Left);
+        serialReceivedRight=(TextView) findViewById(R.id.Right);
+        frontThresholdBar=(SeekBar) findViewById(R.id.frontThresholdBar);
+        frontThresholdValue=(TextView) findViewById(R.id.frontThreshold);
+        sidesThresholdBar=(SeekBar) findViewById(R.id.sidesThresholdBar);
+        sidesThresholdValue=(TextView) findViewById(R.id.sidesThreshold);
+    }
+
+    public void setButton(){
+        buttonScan.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(!isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
+                    onCreateProcess();
+
+                    Intent intent = new Intent(MainActivity.this, BlunoService.class);
+                    startService(intent);
+                }
+                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device
+            }
+        });
+        buttonDisconnect.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (isServiceRunning(getApplicationContext(), "com.example.blunobasicdemo.BlunoService")) {
+                    Intent intent = new Intent(MainActivity.this, BlunoService.class);
+                    stopService(intent);                                        //Alert Dialog for selecting the BLE device
+                    mConnectionState = theConnectionState.isToScan;
+                    onConectionStateChange(mConnectionState);
+                }
+            }
+        });
+    }
+
+    public void setSeekBar(){
+        frontThresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                frontThreshold = progress+thresholdMin;
+                frontThresholdValue.setText(String.valueOf(frontThreshold));
+                thresholdIntent.putExtra("frontThreshold", frontThreshold);
+                thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
+                sendBroadcast(thresholdIntent);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sidesThresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sidesThreshold = progress+thresholdMin;
+                sidesThresholdValue.setText(String.valueOf(sidesThreshold));
+                thresholdIntent.putExtra("frontThreshold", frontThreshold);
+                thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
+                sendBroadcast(thresholdIntent);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+    }
 
 	public class MsgReceiver extends BroadcastReceiver{
 		@Override
@@ -148,9 +216,9 @@ public class MainActivity  extends BlunoLibrary {
 			case isConnected:
 				break;
 			case isDisconnecting:
-				break;
-			default:
-				break;
+                break;
+            default:
+                break;
 		}
 	}
 
@@ -162,9 +230,12 @@ public class MainActivity  extends BlunoLibrary {
 				break;
 			case isConnecting:
 				buttonScan.setText("Connecting");
-				transferIntent.putExtra("mDeviceAddress", mDeviceAddress);
+                transferIntent.putExtra("mDeviceAddress", mDeviceAddress);
 				transferIntent.putExtra("connectionState", connectionState);
+                thresholdIntent.putExtra("frontThreshold", frontThreshold);
+                thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
 				sendBroadcast(transferIntent);
+                sendBroadcast(thresholdIntent);
 				break;
 			case isToScan:
 				buttonScan.setText("Scan");
