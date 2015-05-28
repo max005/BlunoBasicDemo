@@ -32,9 +32,9 @@ public class MainActivity  extends BlunoLibrary {
 	private int front  = 0;
 	private int left   = 0;
 	private int right  = 0;
-    private static int thresholdMin = 35;
-    private int frontThreshold;
-    private int sidesThreshold;
+    private static int thresholdMin = 0;
+    private int frontThreshold = 50;
+    private int sidesThreshold = 50;
 
 	
 	@Override
