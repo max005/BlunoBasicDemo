@@ -72,7 +72,7 @@ public class BlunoService extends Service {
     private String mWarningText;
     private int mWarningCount = 0;
     private boolean turnOff = false;
-    private static final int mWarningCountThreshold = 30;
+    private static final int mWarningCountThreshold = 20;
     private Uri soundUri;
     private long[] vibrate = {0, 100, 500, 100, 500};
     //private static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
@@ -366,11 +366,10 @@ public class BlunoService extends Service {
     }
 
     public void stateProcess(){
-        if(turnOff == true) {
-            if(mWarningCount >= mWarningCountThreshold)
-                mWarningCount++;
-            else
+        if(turnOff) {
+            if(mWarningCount < mWarningCountThreshold) {
                 mWarningCount = mWarningCountThreshold;
+            }
         }
 
         if((left > sidesThreshold && right > sidesThreshold && front > frontThreshold) || mWarningCount >= mWarningCountThreshold){
@@ -384,6 +383,7 @@ public class BlunoService extends Service {
             leftTemp = left;
             rightTemp = right;
             frontTemp = front;
+            mWarningCount+=1;
         }
         else if(left < sidesThreshold && right > sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.left)
@@ -519,7 +519,7 @@ public class BlunoService extends Service {
        PendingIntent openPendingIntent = PendingIntent.getActivity(this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
        Intent deleteIntent = new Intent(this, DeleteService.class);
-       PendingIntent deletePendingIntent = PendingIntent.getService(this, 0, deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+       PendingIntent deletePendingIntent = PendingIntent.getService(this, 0, deleteIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
        NotificationCompat.WearableExtender wearableExtender =
@@ -536,7 +536,7 @@ public class BlunoService extends Service {
                        .setDeleteIntent(deletePendingIntent)
                        .addAction(R.drawable.ic_full_reply, "Turn Off", deletePendingIntent)
                        .extend(wearableExtender)
-                       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                       .setPriority(NotificationCompat.PRIORITY_HIGH)
                        .setSound(soundUri)
                        .setVibrate(vibrate);
 
