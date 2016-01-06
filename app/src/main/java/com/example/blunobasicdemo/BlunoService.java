@@ -13,19 +13,23 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by HuangYuChang on 15/5/6.
  */
+
 public class BlunoService extends Service {
     public static final String SerialPortUUID="0000dfb1-0000-1000-8000-00805f9b34fb";
     public static final String CommandUUID="0000dfb2-0000-1000-8000-00805f9b34fb";
@@ -72,9 +76,11 @@ public class BlunoService extends Service {
     private String mWarningText;
     private int mWarningCount = 0;
     private boolean turnOff = false;
-    private static final int mWarningCountThreshold = 20;
+    private boolean onNotification = false;
+    private static final int mWarningCountThreshold = 40;
     private Uri soundUri;
-    private long[] vibrate = {0, 100, 500, 100, 500};
+    private long[] vibrate = {0, 500};
+    //private doNotification notify;
     //private static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
 
     private Runnable mConnectingOverTimeRunnable=new Runnable(){
@@ -110,6 +116,7 @@ public class BlunoService extends Service {
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             System.out.println("mServiceConnection onServiceConnected");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            //notify = new doNotification();
             if (!mBluetoothLeService.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
             }
@@ -375,8 +382,8 @@ public class BlunoService extends Service {
         if((left > sidesThreshold && right > sidesThreshold && front > frontThreshold) || mWarningCount >= mWarningCountThreshold){
             mWarningState = warningState.safe;
             //turnOff = true;
-            if(mWarningCount >= (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 10 || Math.abs(right-rightTemp) > 10 ||
-                    Math.abs(front-frontTemp) > 20)){
+            if(mWarningCount >= (mWarningCountThreshold+1) && (Math.abs(left-leftTemp) > 5 || Math.abs(right-rightTemp) > 5 ||
+                    Math.abs(front-frontTemp) > 5)){
                 mWarningCount = 0;
                 turnOff = false;
             }
@@ -392,9 +399,12 @@ public class BlunoService extends Service {
             mWarningText = "左方危險, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_left);
-            vibrate = new long[]{0, 100, 500, 100, 500};
-            //postNotifications();
-            myNotification();
+            //vibrate = new long[]{0, 100, 500, 100, 500};
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
+
         }
         else if(left > sidesThreshold && right < sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.right)
@@ -402,10 +412,13 @@ public class BlunoService extends Service {
             mWarningState = warningState.right;
             mWarningText = "右方危險, 注意";
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_right);
-            vibrate = new long[]{0, 500, 500, 100, 500};
+            //vibrate = new long[]{0, 500, 500, 100, 500};
             mWarningCount += 1;
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
         else if(left < sidesThreshold && right < sidesThreshold && front > frontThreshold){
             if(mWarningState != warningState.twoSide)
@@ -414,9 +427,12 @@ public class BlunoService extends Service {
             mWarningText = "兩側危險, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_twosides);
-            vibrate = new long[]{0, 1000, 500, 100, 500};
+            //vibrate = new long[]{0, 1000, 500, 100, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
         else if(left > sidesThreshold && right > sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.front)
@@ -425,9 +441,12 @@ public class BlunoService extends Service {
             mWarningText = "前方危險, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_front);
-            vibrate = new long[]{0, 0, 500, 500, 500};
+            //vibrate = new long[]{0, 0, 500, 500, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
 
         else if(left < sidesThreshold && right < sidesThreshold && front < frontThreshold){
@@ -437,9 +456,12 @@ public class BlunoService extends Service {
             mWarningText = "密集區域, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning);
-            vibrate = new long[]{0, 1000, 500, 500, 500};
+            //vibrate = new long[]{0, 1000, 500, 500, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
         else if(left < sidesThreshold && right > sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.frontAndLeft)
@@ -448,9 +470,12 @@ public class BlunoService extends Service {
             mWarningText = "前方與左方危險, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_frontleft);
-            vibrate = new long[]{0, 100, 500, 500, 500};
+            //vibrate = new long[]{0, 100, 500, 500, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
         else if(left > sidesThreshold && right < sidesThreshold && front < frontThreshold){
             if(mWarningState != warningState.frontAndRight)
@@ -459,9 +484,12 @@ public class BlunoService extends Service {
             mWarningText = "前方與右方危險, 注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning_frontright);
-            vibrate = new long[]{0, 500, 500, 500, 500};
+            //vibrate = new long[]{0, 500, 500, 500, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
         else{
             if(mWarningState != warningState.others)
@@ -470,9 +498,12 @@ public class BlunoService extends Service {
             mWarningText = "注意";
             mWarningCount += 1;
             soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.warning);
-            vibrate = new long[]{0, 1000, 500, 500, 500};
+            //vibrate = new long[]{0, 1000, 500, 500, 500};
             //postNotifications();
-            myNotification();
+            if(!onNotification) {
+                doNotification notify = new doNotification();
+                notify.start();
+            }
         }
 
     }
@@ -547,6 +578,20 @@ public class BlunoService extends Service {
        // Build the notification and issues it with notification manager.
        notificationManager.notify(notificationId, notificationBuilder.build());
    }
+
+    public class doNotification extends Thread {
+        @Override
+        public void run(){
+            onNotification = true;
+            myNotification();
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            onNotification = false;
+        }
+    }
 
     public class MsgReceiver extends BroadcastReceiver{
         @Override

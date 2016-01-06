@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -22,9 +25,9 @@ public class MainActivity  extends BlunoLibrary {
 	private TextView serialReceivedLeft;
 	private TextView serialReceivedRight;
 	private SeekBar frontThresholdBar;
-	private TextView frontThresholdValue;
+	private EditText frontThresholdValue;
 	private SeekBar sidesThresholdBar;
-	private TextView sidesThresholdValue;
+	private EditText sidesThresholdValue;
 	private MsgReceiver msgReceiver;
 	private Intent transferIntent = new Intent("com.example.blunobasicdemo.RECEIVER_SERVICE");
     private Intent thresholdIntent = new Intent("com.example.blunobasicdemo.RECEIVER_THRESHOLD");
@@ -33,8 +36,10 @@ public class MainActivity  extends BlunoLibrary {
 	private int left   = 0;
 	private int right  = 0;
     private static int thresholdMin = 0;
-    private int frontThreshold = 50;
-    private int sidesThreshold = 50;
+	private static int thresholdMax = 350;
+    private int frontThreshold = 100;
+    private int sidesThreshold = 100;
+	private boolean editToSeekbar = false;
 
 	
 	@Override
@@ -45,6 +50,7 @@ public class MainActivity  extends BlunoLibrary {
         findView();
 		setButton();
         setSeekBar();
+		setEditText();
 
 		msgReceiver = new MsgReceiver();
 		IntentFilter intentFilter = new IntentFilter();
@@ -86,9 +92,9 @@ public class MainActivity  extends BlunoLibrary {
         serialReceivedLeft=(TextView) findViewById(R.id.Left);
         serialReceivedRight=(TextView) findViewById(R.id.Right);
         frontThresholdBar=(SeekBar) findViewById(R.id.frontThresholdBar);
-        frontThresholdValue=(TextView) findViewById(R.id.frontThreshold);
+        frontThresholdValue=(EditText) findViewById(R.id.frontThreshold);
         sidesThresholdBar=(SeekBar) findViewById(R.id.sidesThresholdBar);
-        sidesThresholdValue=(TextView) findViewById(R.id.sidesThreshold);
+        sidesThresholdValue=(EditText) findViewById(R.id.sidesThreshold);
     }
 
     public void setButton(){
@@ -121,48 +127,104 @@ public class MainActivity  extends BlunoLibrary {
 
     public void setSeekBar(){
         frontThresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                frontThreshold = progress+thresholdMin;
-                frontThresholdValue.setText(String.valueOf(frontThreshold));
-                thresholdIntent.putExtra("frontThreshold", frontThreshold);
-                thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
-                sendBroadcast(thresholdIntent);
-            }
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				frontThreshold = progress + thresholdMin;
+				if (!editToSeekbar)
+					frontThresholdValue.setText(String.valueOf(frontThreshold));
+				thresholdIntent.putExtra("frontThreshold", frontThreshold);
+				thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
+				sendBroadcast(thresholdIntent);
+			}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+			}
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+			}
+		});
 
         sidesThresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sidesThreshold = progress+thresholdMin;
-                sidesThresholdValue.setText(String.valueOf(sidesThreshold));
-                thresholdIntent.putExtra("frontThreshold", frontThreshold);
-                thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
-                sendBroadcast(thresholdIntent);
-            }
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				sidesThreshold = progress + thresholdMin;
+				if (!editToSeekbar)
+					sidesThresholdValue.setText(String.valueOf(sidesThreshold));
+				thresholdIntent.putExtra("frontThreshold", frontThreshold);
+				thresholdIntent.putExtra("sidesThreshold", sidesThreshold);
+				sendBroadcast(thresholdIntent);
+			}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+			}
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+			}
+		});
 
     }
+
+	public void setEditText(){
+		frontThresholdValue.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				try {
+					editToSeekbar = true;
+					if (Integer.parseInt(s.toString()) > thresholdMax) {
+						frontThresholdBar.setProgress(thresholdMax);
+						frontThresholdValue.setText(String.valueOf(thresholdMax));
+					} else
+						frontThresholdBar.setProgress(Integer.parseInt(s.toString()));
+					editToSeekbar = false;
+				} catch (Exception ex) {
+				}
+			}
+		});
+
+		sidesThresholdValue.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				try {
+					editToSeekbar = true;
+					if (Integer.parseInt(s.toString()) > thresholdMax) {
+						sidesThresholdBar.setProgress(thresholdMax);
+						sidesThresholdValue.setText(String.valueOf(thresholdMax));
+					} else
+						sidesThresholdBar.setProgress(Integer.parseInt(s.toString()));
+					editToSeekbar = false;
+				} catch (Exception ex) {
+				}
+			}
+		});
+	}
 
 	public class MsgReceiver extends BroadcastReceiver{
 		@Override

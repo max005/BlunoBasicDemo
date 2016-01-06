@@ -2,11 +2,25 @@
 <items version="2" >
 
     <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
         jumboMode="false"
-        revision="22.0.1"
+        revision="23.0.1"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-0b2c50f36dabaefeee496edc7d69269e06b83334.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/jars/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
         sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-2ab8389b39ee0bbec60c5ae92fec8d5dee01f663.jar" />
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-427f6aa2e180ce45e8f9eb4dc3b031ed6feac87e.jar" />
+    </item>
+    <item
+        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/classes-589df1b69b5950acf1f37dce323a5922a4eed015.jar" />
     </item>
     <item
         jar="/Users/HuangYuChang/Documents/android/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
@@ -14,13 +28,6 @@
         revision="22.0.1"
         sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
         <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-0b2c50f36dabaefeee496edc7d69269e06b83334.jar" />
-    </item>
-    <item
-        jar="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
-        <dex dex="/Users/HuangYuChang/AndroidstudioProjects/BlunoBasicDemo/app/build/intermediates/pre-dexed/debug/classes-269167ee00f2038db2ba0628645d2983b3c7ef1a.jar" />
     </item>
 
 </items>

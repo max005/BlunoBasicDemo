@@ -92,7 +92,7 @@
           android:layout_height="wrap_content"
           android:id="@+id/frontThresholdBar"
           android:max="350"
-          android:progress="50"
+          android:progress="100"
           android:layout_alignParentStart="true"
           android:layout_alignParentEnd="true"
           android:layout_below="@+id/textView"
@@ -117,11 +117,13 @@
           android:layout_alignParentStart="true"
           android:layout_marginTop="25dp" />
 
-  <TextView
+  <EditText
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          android:text="50"
+          android:inputType="phone"
+          android:minEms="0"
+          android:maxEms="3"
+          android:text="100"
           android:id="@+id/frontThreshold"
           android:layout_below="@+id/frontThresholdBar"
           android:layout_centerHorizontal="true" />
@@ -150,7 +152,7 @@
           android:layout_height="wrap_content"
           android:id="@+id/sidesThresholdBar"
           android:max="350"
-          android:progress="50"
+          android:progress="100"
           android:layout_below="@+id/textView9"
           android:layout_alignParentStart="true"
           android:layout_alignEnd="@+id/frontThresholdBar" />
@@ -164,11 +166,13 @@
           android:layout_above="@+id/sidesThresholdBar"
           android:layout_alignParentEnd="true" />
 
-  <TextView
+  <EditText
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          android:text="50"
+          android:inputType="phone"
+          android:minEms="0"
+          android:maxEms="3"
+          android:text="100"
           android:id="@+id/sidesThreshold"
           android:layout_below="@+id/sidesThresholdBar"
           android:layout_centerHorizontal="true" />
